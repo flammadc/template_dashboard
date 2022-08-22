@@ -12,12 +12,12 @@ const routes = [
     name: 'Dashboard', // name that appear in Sidebar
   },
   {
-    path: '/app/forms',
+    path: '/app/product',
     icon: 'ProductIcon',
     name: 'Product',
   },
   {
-    path: '/app/teams',
+    path: '/app/team',
     icon: 'PeopleIcon',
     name: 'Team',
   },
@@ -57,11 +57,11 @@ const routes = [
     routes: [
       // submenu
       {
-        path: '/login',
+        path: '/app/income',
         name: 'Income',
       },
       {
-        path: '/create-account',
+        path: '/app/outcome',
         name: 'Outcome',
       },
       // {

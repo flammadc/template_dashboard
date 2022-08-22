@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Link, Redirect } from "react-router-dom";
 
 import PageTitle from "../components/Typography/PageTitle";
+
 import {
   Table,
   TableHeader,
@@ -15,9 +17,11 @@ import {
   Pagination,
 } from "@windmill/react-ui";
 
+import { doughnutOptions, doughnutLegends } from "../utils/demo/chartsData";
+import { Doughnut, Line, Bar } from "react-chartjs-2";
+
 import { EditIcon, TrashIcon } from "../icons";
 import ChartCard from "../components/Chart/ChartCard";
-import { Line } from "react-chartjs-2";
 
 import ChartLegend from "../components/Chart/ChartLegend";
 import { lineOptions, lineLegends } from "../utils/demo/chartsData";
@@ -82,76 +86,102 @@ function Dashboard() {
   return (
     <>
       <PageTitle>Dashboard</PageTitle>
-      {/* <div className=""> */}
-      <ChartCard title="Lines" className="mb-8">
-        <Line {...lineOptions} />
-        <ChartLegend legends={lineLegends} />
-      </ChartCard>
+      <div className="grid grid-cols-2 gap-6 mb-8">
+        <ChartCard title="" className="col-span-1">
+          <Line {...lineOptions} />
+          <ChartLegend legends={lineLegends} />
+        </ChartCard>
 
-      <TableContainer>
-        <Table>
-          <TableHeader>
-            <tr>
-              <TableCell>Product</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Actions</TableCell>
-            </tr>
-          </TableHeader>
-          <TableBody>
-            {dataTable2.map((user, i) => (
-              <TableRow key={i}>
-                <TableCell>
-                  <div className="flex items-center text-sm">
-                    <Avatar
-                      className="hidden mr-3 md:block"
-                      src={user.avatar}
-                      alt="User avatar"
-                    />
-                    <div>
-                      <p className="font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
-                        {user.job}
-                      </p>
+        <ChartCard title="" className="col-span-1">
+          <Doughnut {...doughnutOptions} />
+          <ChartLegend legends={doughnutLegends} />
+        </ChartCard>
+
+        <TableContainer className="col-span-2">
+          <Table>
+            <TableHeader>
+              <tr>
+                <TableCell>Product</TableCell>
+                <TableCell>Amount</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Actions</TableCell>
+              </tr>
+            </TableHeader>
+            <TableBody>
+              {dataTable2.map((product, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <div className="flex items-center text-sm">
+                      <Avatar
+                        className="hidden mr-3 md:block"
+                        src={product.picture}
+                        alt="Product picture"
+                      />
+                      <div>
+                        <p className="font-semibold">{product.name}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">
+                          {product.category}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">$ {user.amount}</span>
-                </TableCell>
-                <TableCell>
-                  <Badge type={user.status}>{user.status}</Badge>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">
-                    {new Date(user.date).toLocaleDateString()}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center space-x-4">
-                    <Button layout="link" size="icon" aria-label="Edit">
-                      <EditIcon className="w-5 h-5" aria-hidden="true" />
-                    </Button>
-                    <Button layout="link" size="icon" aria-label="Delete">
-                      <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <TableFooter>
-          <Pagination
-            totalResults={totalResults}
-            resultsPerPage={resultsPerPage}
-            onChange={onPageChangeTable2}
-            label="Table navigation"
-          />
-        </TableFooter>
-      </TableContainer>
-      {/* </div> */}
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">$ {product.amount}</span>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      type={product.status}
+                      className={
+                        product.status == "Income"
+                          ? "text-teal-700 bg-teal-100 dark:text-white dark:bg-teal-600"
+                          : "text-purple-700 bg-purple-100 dark:text-white dark:bg-purple-600"
+                      }
+                    >
+                      {product.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {new Date(product.date).toLocaleDateString()}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center space-x-4">
+                      <Button
+                        tag={Link}
+                        to={"/app/product/edit/" + product.id}
+                        layout="link"
+                        size="icon"
+                        aria-label="Edit"
+                      >
+                        <EditIcon className="w-5 h-5" aria-hidden="true" />
+                      </Button>
+                      <Button
+                        tag={Link}
+                        to={"/app/product/edit/" + product.id}
+                        layout="link"
+                        size="icon"
+                        aria-label="Delete"
+                      >
+                        <TrashIcon className="w-5 h-5" aria-hidden="true" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <TableFooter>
+            <Pagination
+              totalResults={totalResults}
+              resultsPerPage={resultsPerPage}
+              onChange={onPageChangeTable2}
+              label="Table navigation"
+            />
+          </TableFooter>
+        </TableContainer>
+      </div>
     </>
   );
 }

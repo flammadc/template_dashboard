@@ -41,14 +41,6 @@ function SidebarContent() {
           )
         )}
       </ul>
-      <div className="px-6 my-6">
-        <Button>
-          Logout
-          <span className="ml-2" aria-hidden="true">
-            <Icons.LogoutIcon/>
-          </span>
-        </Button>
-      </div>
     </div>
   )
 }
