@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 
-import PageTitle from "../components/Typography/PageTitle";
+import PageTitle from "../../components/Typography/PageTitle";
 
 import {
   Table,
@@ -16,21 +16,13 @@ import {
   Button,
   Pagination,
 } from "@windmill/react-ui";
+import { EditIcon, TrashIcon } from "../../icons";
 
-import { doughnutOptions, doughnutLegends } from "../utils/demo/chartsData";
-import { Doughnut, Line, Bar } from "react-chartjs-2";
-
-import { EditIcon, TrashIcon } from "../icons";
-import ChartCard from "../components/Chart/ChartCard";
-
-import ChartLegend from "../components/Chart/ChartLegend";
-import { lineOptions, lineLegends } from "../utils/demo/chartsData";
-
-import response from "../utils/demo/tableData";
+import response from "../../utils/demo/userData";
 // make a copy of the data, for the second table
 const response2 = response.concat([]);
 
-function Dashboard() {
+const Team = () => {
   /**
    * DISCLAIMER: This code could be badly improved, but for the sake of the example
    * and readability, all the logic for both table are here.
@@ -82,71 +74,45 @@ function Dashboard() {
       )
     );
   }, [pageTable2]);
-
   return (
     <>
-      <PageTitle>Dashboard</PageTitle>
-      <div className="grid grid-cols-2 gap-6 mb-8">
-        <ChartCard title="" className="col-span-1">
-          <Line {...lineOptions} />
-          <ChartLegend legends={lineLegends} />
-        </ChartCard>
-
-        <ChartCard title="" className="col-span-1">
-          <Doughnut {...doughnutOptions} />
-          <ChartLegend legends={doughnutLegends} />
-        </ChartCard>
-
-        <TableContainer className="col-span-2">
+      <PageTitle>Team</PageTitle>
+      <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-3">
+        <Button className="col-span-1" tag={Link} to="/app/user/add">
+          Add User
+        </Button>
+        <TableContainer className="col-span-3">
           <Table>
             <TableHeader>
               <tr>
-                <TableCell>Product</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Date</TableCell>
+                <TableCell>User</TableCell>
                 <TableCell>Actions</TableCell>
               </tr>
             </TableHeader>
             <TableBody>
-              {dataTable2.map((product, i) => (
+              {dataTable2.map((user, i) => (
                 <TableRow key={i}>
                   <TableCell>
                     <div className="flex items-center text-sm">
-                      
+                      <Avatar
+                        className="hidden mr-3 md:block"
+                        src={user.picture}
+                        alt="User picture"
+                      />
                       <div>
-                        <p className="font-semibold">{product.name}</p>
+                        <p className="font-semibold">{user.name}</p>
                         <p className="text-xs text-gray-600 dark:text-gray-400">
-                          {product.category}
+                          {user.title}
                         </p>
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <span className="text-sm">$ {product.amount}</span>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      type={product.status}
-                      className={
-                        product.status == "Income"
-                          ? "text-teal-700 bg-teal-100 dark:text-white dark:bg-teal-600"
-                          : "text-purple-700 bg-purple-100 dark:text-white dark:bg-purple-600"
-                      }
-                    >
-                      {product.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-sm">
-                      {new Date(product.date).toLocaleDateString()}
-                    </span>
-                  </TableCell>
+
                   <TableCell>
                     <div className="flex items-center space-x-4">
                       <Button
                         tag={Link}
-                        to={"/app/product/edit/" + product.id}
+                        to={"/app/user/edit/" + user.id}
                         layout="link"
                         size="icon"
                         aria-label="Edit"
@@ -155,7 +121,7 @@ function Dashboard() {
                       </Button>
                       <Button
                         tag={Link}
-                        to={"/app/product/delete/" + product.id}
+                        to={"/app/user/delete/" + user.id}
                         layout="link"
                         size="icon"
                         aria-label="Delete"
@@ -180,6 +146,6 @@ function Dashboard() {
       </div>
     </>
   );
-}
+};
 
-export default Dashboard;
+export default Team;

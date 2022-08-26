@@ -1,7 +1,6 @@
 export default [
   {
     id: 1,
-    picture: 'https://source.unsplash.com/1600x900/?groceries',
     name: 'Red Hot Chille Paper',
     category: 'Chillie',
     amount: 989.4,
@@ -11,7 +10,6 @@ export default [
   },
   {
     id: 2,
-    picture: 'https://source.unsplash.com/1600x900/?groceries',
     name: 'Red Hot Chille Paper',
     category: 'Chillie',
     amount: 989.4,
@@ -21,7 +19,6 @@ export default [
   },
   {
     id: 3,
-    picture: 'https://source.unsplash.com/1600x900/?groceries',
     name: 'Red Hot Chille Paper',
     category: 'Chillie',
     amount: 989.4,
@@ -31,7 +28,6 @@ export default [
   },
   {
     id: 4,
-    picture: 'https://source.unsplash.com/1600x900/?groceries',
     name: 'Red Hot Chille Paper',
     category: 'Chillie',
     amount: 989.4,
@@ -41,7 +37,6 @@ export default [
   },
   {
     id: 5,
-    picture: 'https://source.unsplash.com/1600x900/?groceries',
     name: 'Red Hot Chille Paper',
     category: 'Chillie',
     amount: 989.4,
@@ -51,7 +46,6 @@ export default [
   },
   {
     id: 6,
-    picture: 'https://source.unsplash.com/1600x900/?groceries',
     name: 'Red Hot Chille Paper',
     category: 'Chillie',
     amount: 989.4,
@@ -61,7 +55,6 @@ export default [
   },
   {
     id: 1,
-    picture: 'https://source.unsplash.com/1600x900/?groceries',
     name: 'Red Hot Chille Paper',
     category: 'Chillie',
     amount: 989.4,
@@ -71,7 +64,6 @@ export default [
   },
   {
     id: 7,
-    picture: 'https://source.unsplash.com/1600x900/?groceries',
     name: 'Red Hot Chille Paper',
     category: 'Chillie',
     amount: 989.4,

@@ -96,14 +96,10 @@ function Header() {
                 />
                 <span>Profile</span>
               </DropdownItem>
-              <DropdownItem tag="a" href="#">
-                <OutlineCogIcon className="w-4 h-4 mr-3" aria-hidden="true" />
-                <span>Settings</span>
-              </DropdownItem>
+
               <DropdownItem
                 tag={Link}
                 to="/login"
-                onClick={() => alert("Log out!")}
               >
                 <OutlineLogoutIcon
                   className="w-4 h-4 mr-3"

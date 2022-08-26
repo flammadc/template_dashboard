@@ -103,11 +103,6 @@ const Product = () => {
                 <TableRow key={i}>
                   <TableCell>
                     <div className="flex items-center text-sm">
-                      <Avatar
-                        className="hidden mr-3 md:block"
-                        src={product.picture}
-                        alt="Product picture"
-                      />
                       <div>
                         <p className="font-semibold">{product.name}</p>
                         <p className="text-xs text-gray-600 dark:text-gray-400">
