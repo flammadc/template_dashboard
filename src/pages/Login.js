@@ -15,13 +15,13 @@ function Login() {
             <img
               aria-hidden="true"
               className="object-cover w-full h-full dark:hidden"
-              src={ImageLight}
+              src="https://media.istockphoto.com/photos/paper-bag-with-different-food-on-white-background-picture-id1265063603?k=20&m=1265063603&s=612x612&w=0&h=Ah_BHqzVvqg7bsqAmvg1ADYrH0szCoTXy_sdooxghKM="
               alt="Office"
             />
             <img
               aria-hidden="true"
               className="hidden object-cover w-full h-full dark:block"
-              src={ImageDark}
+              src="https://images.unsplash.com/photo-1587384178911-b70b8df870a4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8OHwzNzQyNDU4fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
               alt="Office"
             />
           </div>
@@ -51,11 +51,6 @@ function Login() {
               <Button className="mt-4" block tag={Link} to="/app">
                 Log in
               </Button>
-
-
-
-
-
             </div>
           </main>
         </div>

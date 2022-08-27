@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import PageTitle from "../../components/Typography/PageTitle";
+<<<<<<< HEAD
 import { Input, Label, Button, Select } from "@windmill/react-ui";
+=======
+import { Input, HelperText, Label, Textarea, Button } from "@windmill/react-ui";
+>>>>>>> d762807e6567311200d455ef8b0d2d14e152db52
 
 function Add() {
   const [category, setCategory] = useState(["Fruit", "Spice", "Food"]);
