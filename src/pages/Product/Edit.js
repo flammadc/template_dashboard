@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 
 import PageTitle from "../../components/Typography/PageTitle";
 import { Input, HelperText, Label, Textarea, Button } from "@windmill/react-ui";
-import CustomCreatable from "../../components/Creatable";
 import response from "../../utils/demo/tableData";
 
 function Edit() {
