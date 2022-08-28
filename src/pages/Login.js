@@ -1,9 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-import ImageLight from "../assets/img/login-office.jpeg";
-import ImageDark from "../assets/img/login-office-dark.jpeg";
-import { GithubIcon, TwitterIcon } from "../icons";
 import { Label, Input, Button } from "@windmill/react-ui";
 
 function Login() {
