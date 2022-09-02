@@ -2,14 +2,11 @@ import { api } from "./configs/axiosConfig";
 import { defineCancelApiObject } from "./configs/axiosUtils";
 
 export const AuthAPI = {
-  login: async function (cancel = false) {
+  login: async function (user, cancel = false) {
     const response = await api.request({
       url: `/auth/login`,
       method: "POST",
-      data: { email: "andi@gmail.com", password: "12345" },
-      headers: {
-        "Access-Control-Allow-Origin": true,
-      },
+      data: user,
       // retrieving the signal value by using the property name
       signal: cancel
         ? cancelApiObject[this.get.name].handleRequestCancellation().signal
@@ -31,7 +28,7 @@ export const AuthAPI = {
   },
   logout: async function (id, cancel = false) {
     const response = await api.request({
-      url: `/auth/logout/:id`,
+      url: `auth/logout/${id}`,
       method: "POST",
       // retrieving the signal value by using the property name
       signal: cancel

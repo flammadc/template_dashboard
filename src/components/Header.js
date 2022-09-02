@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Link, Route } from "react-router-dom";
 import { SidebarContext } from "../context/SidebarContext";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../utils/function/auth";
 import {
   SearchIcon,
   MoonIcon,
@@ -21,6 +23,8 @@ import {
 } from "@windmill/react-ui";
 
 function Header() {
+  const user = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
   const { mode, toggleMode } = useContext(WindmillContext);
   const { toggleSidebar } = useContext(SidebarContext);
 
@@ -34,6 +38,10 @@ function Header() {
   function handleProfileClick() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   }
+
+  const handleLogout = () => {
+    logout(dispatch, user.id);
+  };
 
   return (
     <header className="z-40 py-4 bg-white shadow-bottom dark:bg-gray-800">
@@ -97,10 +105,7 @@ function Header() {
                 <span>Profile</span>
               </DropdownItem>
 
-              <DropdownItem
-                tag={Link}
-                to="/login"
-              >
+              <DropdownItem onClick={handleLogout}>
                 <OutlineLogoutIcon
                   className="w-4 h-4 mr-3"
                   aria-hidden="true"

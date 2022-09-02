@@ -4,10 +4,10 @@ import Cookies from "universal-cookie";
 
 const token = new Cookies().get("user_token");
 
-export const ProductAPI = {
+export const CategoryAPI = {
   get: async function (id, cancel = false) {
     const response = await api.request({
-      url: `/products/${id}`,
+      url: `/categories/${id}`,
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -23,7 +23,7 @@ export const ProductAPI = {
   },
   getAll: async function (cancel = false) {
     const response = await api.request({
-      url: "/products/",
+      url: "/categories/",
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ export const ProductAPI = {
   },
   search: async function (name, cancel = false) {
     const response = await api.request({
-      url: "/products/search",
+      url: "/categories/search",
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -50,11 +50,11 @@ export const ProductAPI = {
         : undefined,
     });
 
-    return response.data.products;
+    return response.data;
   },
   create: async function (product, cancel = false) {
     await api.request({
-      url: `/products`,
+      url: `/categories`,
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -67,5 +67,5 @@ export const ProductAPI = {
   },
 };
 
-// defining the cancel API object for ProductAPI
-const cancelApiObject = defineCancelApiObject(ProductAPI);
+// defining the cancel API object for CategoryAPI
+const cancelApiObject = defineCancelApiObject(CategoryAPI);

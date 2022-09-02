@@ -4,10 +4,10 @@ import Cookies from "universal-cookie";
 
 const token = new Cookies().get("user_token");
 
-export const ProductAPI = {
+export const IncomeAPI = {
   get: async function (id, cancel = false) {
     const response = await api.request({
-      url: `/products/${id}`,
+      url: `/incomes/:id`,
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -21,9 +21,51 @@ export const ProductAPI = {
     // returning the product returned by the API
     return response.data;
   },
+  stats: async function (cancel = false) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await api.request({
+          url: `/incomes/stats`,
+          method: "GET",
+          // retrieving the signal value by using the property name
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          signal: cancel
+            ? cancelApiObject[this.get.name].handleRequestCancellation().signal
+            : undefined,
+        });
+        resolve(response.data);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  },
+  total: function (cancel = false) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await api.request({
+          url: `/incomes/total`,
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          // retrieving the signal value by using the property name
+          signal: cancel
+            ? cancelApiObject[this.get.name].handleRequestCancellation().signal
+            : undefined,
+        });
+        resolve(response.data);
+      } catch (error) {
+        reject(error);
+      }
+    });
+
+    // returning the product returned by the API
+  },
   getAll: async function (cancel = false) {
     const response = await api.request({
-      url: "/products/",
+      url: "/incomes/",
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -37,11 +79,8 @@ export const ProductAPI = {
   },
   search: async function (name, cancel = false) {
     const response = await api.request({
-      url: "/products/search",
+      url: "/incomes/search",
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       params: {
         name: name,
       },
@@ -50,11 +89,11 @@ export const ProductAPI = {
         : undefined,
     });
 
-    return response.data.products;
+    return response.data;
   },
   create: async function (product, cancel = false) {
     await api.request({
-      url: `/products`,
+      url: `/incomes`,
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -68,4 +107,4 @@ export const ProductAPI = {
 };
 
 // defining the cancel API object for ProductAPI
-const cancelApiObject = defineCancelApiObject(ProductAPI);
+const cancelApiObject = defineCancelApiObject(IncomeAPI);
