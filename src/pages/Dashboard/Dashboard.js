@@ -12,7 +12,7 @@ import {
 } from "@windmill/react-ui";
 
 import { doughnutOptions, doughnutLegends } from "../../utils/demo/chartsData";
-import { Doughnut, Line, Bar } from "react-chartjs-2";
+import { Doughnut, Line } from "react-chartjs-2";
 
 import { IncomeAPI } from "../../apis/IncomeAPI";
 import { OutcomeAPI } from "../../apis/OutcomeAPI";
@@ -25,34 +25,13 @@ import { lineOptions, lineLegends } from "../../utils/demo/chartsData";
 import response from "../../utils/demo/tableData";
 import TableDashboard from "./TableDashboard";
 import { useSelector } from "react-redux";
-// make a copy of the data, for the second table
-const response2 = response.concat([]);
 
 function Dashboard() {
-  /**
-   * DISCLAIMER: This code could be badly improved, but for the sake of the example
-   * and readability, all the logic for both table are here.
-   * You would be better served by dividing each table in its own
-   * component, like Table(?) and TableWithActions(?) hiding the
-   * presentation details away from the page view.
-   */
-
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-  const [pageTable2, setPageTable2] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-  const [dataTable2, setDataTable2] = useState([]);
-
   const user = useSelector((state) => state.user.currentUser);
-
   const [amountDoughnut, setAmountDoughnut] = useState({
     income: 0,
     outcome: 0,
   });
-
-  const [length, setLength] = useState(0);
 
   const [incomeStats, setIncomeStats] = useState([]);
   const [outcomeStats, setOutcomeStats] = useState([]);
@@ -61,8 +40,8 @@ function Dashboard() {
 
   useEffect(() => {
     const getDataDoughnut = async () => {
-      const income = await IncomeAPI.total();
-      const outcome = await OutcomeAPI.total();
+      const income = await IncomeAPI.total(user.token);
+      const outcome = await OutcomeAPI.total(user.token);
       setAmountDoughnut({
         income: income[0].amount,
         outcome: outcome[0].amount,
@@ -74,19 +53,16 @@ function Dashboard() {
   const dataDoughnut = {
     ...doughnutOptions,
     data: {
+      ...doughnutOptions.data,
       datasets: [
         {
           data: [amountDoughnut.outcome, amountDoughnut.income],
-          /**
-           * These colors come from Tailwind CSS palette
-           * https://tailwindcss.com/docs/customizing-colors/#default-color-palette
-           */
           backgroundColor: ["#7e3af2", "#047481"],
         },
       ],
-      labels: ["Outcome", "Income"],
     },
   };
+
   const MONTHS = useMemo(
     () => [
       "Jan",
@@ -107,12 +83,12 @@ function Dashboard() {
 
   useEffect(() => {
     const getDataLine = async () => {
-      const income = await IncomeAPI.stats();
+      const income = await IncomeAPI.stats(user.token);
       income.forEach((data) => {
         setIncomeStats((prev) => [...prev, data]);
       });
 
-      const outcome = await OutcomeAPI.stats();
+      const outcome = await OutcomeAPI.stats(user.token);
       outcome.forEach((data) => {
         setOutcomeStats((prev) => [...prev, data]);
       });
@@ -129,26 +105,12 @@ function Dashboard() {
           : outcomeStats.map((data) => MONTHS[data.month - 1]),
       datasets: [
         {
-          label: "Income",
-          /**
-           * These colors come from Tailwind CSS palette
-           * https://tailwindcss.com/docs/customizing-colors/#default-color-palette
-           */
-          backgroundColor: "#047481",
-          borderColor: "#047481",
+          ...lineOptions.data.datasets[0],
           data: incomeStats.map((data) => data.amount),
-          fill: false,
         },
         {
-          label: "Outcome",
-          fill: false,
-          /**
-           * These colors come from Tailwind CSS palette
-           * https://tailwindcss.com/docs/customizing-colors/#default-color-palette
-           */
-          backgroundColor: "#7e3af2",
+          ...lineOptions.data.datasets[1],
           data: outcomeStats.map((data) => data.amount),
-          borderColor: "#7e3af2",
         },
       ],
     },
@@ -156,11 +118,11 @@ function Dashboard() {
 
   useEffect(() => {
     const getTransactions = async () => {
-      const incomes = await IncomeAPI.getAll();
+      const incomes = await IncomeAPI.getAll(user.token);
       incomes.map((income) => {
         income.status = "income";
       });
-      const outcomes = await OutcomeAPI.getAll();
+      const outcomes = await OutcomeAPI.getAll(user.token);
       outcomes.map((outcome) => {
         outcome.status = "outcome";
       });
@@ -212,7 +174,6 @@ function Dashboard() {
                 transactions.map((transaction, i) => (
                   <TableDashboard
                     transaction={transaction}
-                    productId={transaction.product_id}
                     key={i}
                     status={transaction.status}
                   />

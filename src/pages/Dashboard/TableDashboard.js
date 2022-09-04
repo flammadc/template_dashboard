@@ -1,40 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { ProductAPI } from "../../apis/ProductAPI";
 import { CategoryAPI } from "../../apis/CategoryAPI";
-import { EditIcon, TrashIcon } from "../../icons";
 import moment from "moment";
 
-import { Badge, Button, TableRow, TableCell } from "@windmill/react-ui";
+import { Badge, TableRow, TableCell } from "@windmill/react-ui";
+import { useSelector } from "react-redux";
 
-const TableDashboard = ({ productId, status, transaction }) => {
-  const [product, setProduct] = useState();
+const TableDashboard = ({ status, transaction }) => {
+  const user = useSelector((state) => state.user.currentUser);
   const [category, setCategory] = useState();
 
   useEffect(() => {
-    const getProduct = async () => {
-      const res = await ProductAPI.get(productId);
-      setProduct(res);
-    };
-
-    getProduct();
-  }, []);
-
-  useEffect(() => {
     const getCategory = async () => {
-      const res = await CategoryAPI.get(product.category_id);
+      const res = await CategoryAPI.get(
+        user.token,
+        transaction.product.category_id
+      );
       setCategory(res);
     };
 
-    product && getCategory();
-  }, [product]);
+    getCategory();
+  }, []);
 
   return (
     <TableRow>
       <TableCell>
         <div className="flex items-center text-sm">
           <div>
-            <p className="font-semibold">{product?.name}</p>
+            <p className="font-semibold">{transaction.product.name}</p>
             <p className="text-xs text-gray-600 dark:text-gray-400">
               {category?.name}
             </p>
