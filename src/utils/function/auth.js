@@ -21,8 +21,8 @@ export const login = async (dispatch, user) => {
   }
 };
 
-export const logout = (dispatch, id) => {
+export const logout = async (dispatch, id) => {
   cookies.remove("user_token");
-  AuthAPI.logout(id);
+  await AuthAPI.logout(id);
   dispatch(logoutAction());
 };
