@@ -1,13 +1,10 @@
 import { api } from "./configs/axiosConfig";
 import { defineCancelApiObject } from "./configs/axiosUtils";
-import Cookies from "universal-cookie";
-
-const token = new Cookies().get("user_token");
 
 export const IncomeAPI = {
-  get: async function (id, cancel = false) {
+  get: async function (token, id, cancel = false) {
     const response = await api.request({
-      url: `/incomes/:id`,
+      url: `/incomes/${id}`,
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -21,7 +18,7 @@ export const IncomeAPI = {
     // returning the product returned by the API
     return response.data;
   },
-  stats: async function (cancel = false) {
+  stats: async function (token, cancel = false) {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await api.request({
@@ -41,7 +38,7 @@ export const IncomeAPI = {
       }
     });
   },
-  total: function (cancel = false) {
+  total: function (token, cancel = false) {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await api.request({
@@ -63,7 +60,7 @@ export const IncomeAPI = {
 
     // returning the product returned by the API
   },
-  getAll: async function (cancel = false) {
+  getAll: async function (token, cancel = false) {
     const response = await api.request({
       url: "/incomes/",
       method: "GET",
@@ -77,28 +74,14 @@ export const IncomeAPI = {
 
     return response.data;
   },
-  search: async function (name, cancel = false) {
-    const response = await api.request({
-      url: "/incomes/search",
-      method: "GET",
-      params: {
-        name: name,
-      },
-      signal: cancel
-        ? cancelApiObject[this.search.name].handleRequestCancellation().signal
-        : undefined,
-    });
-
-    return response.data;
-  },
-  create: async function (product, cancel = false) {
+  create: async function (token, data, cancel = false) {
     await api.request({
       url: `/incomes`,
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      data: product,
+      data,
       signal: cancel
         ? cancelApiObject[this.create.name].handleRequestCancellation().signal
         : undefined,
