@@ -45,6 +45,32 @@ export const CategoryAPI = {
         : undefined,
     });
   },
+  update: async function (token, id, data, cancel = false) {
+    await api.request({
+      url: `/categories/${id}`,
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data,
+      signal: cancel
+        ? cancelApiObject[this.create.name].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
+
+  delete: async function (token, id, cancel = false) {
+    await api.request({
+      url: `/categories/${id}`,
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      signal: cancel
+        ? cancelApiObject[this.create.name].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
 };
 
 // defining the cancel API object for CategoryAPI

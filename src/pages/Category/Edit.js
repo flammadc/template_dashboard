@@ -1,32 +1,54 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useHistory } from "react-router-dom";
 
 import PageTitle from "../../components/Typography/PageTitle";
-import { Input, HelperText, Label, Textarea, Button } from "@windmill/react-ui";
-import response from "../../utils/demo/tableData";
+import { Input, Label, Button } from "@windmill/react-ui";
+import { useSelector } from "react-redux";
+import { CategoryAPI } from "../../apis/CategoryAPI";
 
 const Edit = () => {
+  const user = useSelector((state) => state.user.currentUser);
   const id = useLocation().pathname.split("/")[4];
+
+  const history = useHistory();
+  const [category, setCategory] = useState({ name: "" });
+
+  useState(() => {
+    const getCategory = async () => {
+      const res = await CategoryAPI.get(user.token, id);
+      setCategory(res);
+    };
+    getCategory();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    await CategoryAPI.update(user.token, id, category);
+    history.push("/app/category");
+  };
 
   return (
     <>
       <PageTitle>Edit Category</PageTitle>
 
-      <div className="px-4 py-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <form
+        className="px-4 py-4 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
+        onSubmit={handleSubmit}
+      >
         <Label>
           <span>Name</span>
-          <Input className="mt-1" value={response[id].category} />
+          <Input
+            className="mt-1"
+            value={category?.name}
+            onChange={(e) => setCategory({ ...category, name: e.target.value })}
+          />
         </Label>
 
-        <Button
-          className="mt-6 w-auto"
-          size="large"
-          tag={Link}
-          to="/app/category"
-        >
+        <Button className="mt-6 w-auto" size="large" type="submit">
           Submit
         </Button>
-      </div>
+      </form>
     </>
   );
 };
