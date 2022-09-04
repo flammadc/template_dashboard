@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import PageTitle from "../../components/Typography/PageTitle";
 import {
@@ -7,23 +7,24 @@ import {
   TableHeader,
   TableCell,
   TableBody,
-  TableFooter,
   TableContainer,
   Button,
-  Pagination,
 } from "@windmill/react-ui";
 
 import response from "../../utils/demo/tableData";
 import { ProductAPI } from "../../apis/ProductAPI";
 import DataTable from "./DataTable";
+import { useSelector } from "react-redux";
 // make a copy of the data, for the second table
 
 const Product = () => {
+  const user = useSelector((state) => state.user.currentUser);
   const [products, setProducts] = useState();
+  const history = useHistory();
 
   useEffect(() => {
     const getProducts = async () => {
-      const res = await ProductAPI.getAll();
+      const res = await ProductAPI.getAll(user.token);
       setProducts(res);
     };
     getProducts();
@@ -33,28 +34,20 @@ const Product = () => {
     <>
       <PageTitle className="bg-white">Product</PageTitle>
       <div className="grid gap-6 mb-8 grid-cols-3">
-        <Button className="col-span-1" tag={Link} to="/app/product/add">
-          Add Product
-        </Button>
         <TableContainer className="col-span-3">
           <Table>
             <TableHeader>
               <tr>
                 <TableCell>Product</TableCell>
-                <TableCell>Amount</TableCell>
+                <TableCell>Price</TableCell>
                 <TableCell>Stock</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell>Product Change</TableCell>
               </tr>
             </TableHeader>
             <TableBody>
               {products &&
                 products.map((product) => (
-                  <DataTable
-                    product={product}
-                    categoryId={product.categoryId}
-                    key={product.id}
-                  />
+                  <DataTable product={product} key={product.id} />
                 ))}
             </TableBody>
           </Table>
