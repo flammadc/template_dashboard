@@ -33,7 +33,7 @@ export const ProductAPI = {
     return response.data;
   },
   create: async function (token, product, cancel = false) {
-    await api.request({
+    const response = await api.request({
       url: `/products`,
       method: "POST",
       headers: {
@@ -44,6 +44,7 @@ export const ProductAPI = {
         ? cancelApiObject[this.create.name].handleRequestCancellation().signal
         : undefined,
     });
+    return response.data;
   },
 };
 

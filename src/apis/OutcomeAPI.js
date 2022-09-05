@@ -4,7 +4,7 @@ import { defineCancelApiObject } from "./configs/axiosUtils";
 export const OutcomeAPI = {
   get: async function (token, id, cancel = false) {
     const response = await api.request({
-      url: `/outcomes/:id`,
+      url: `/outcomes/${id}`,
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -73,6 +73,31 @@ export const OutcomeAPI = {
         Authorization: `Bearer ${token}`,
       },
       data: product,
+      signal: cancel
+        ? cancelApiObject[this.create.name].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
+  update: async function (token, id, product, cancel = false) {
+    await api.request({
+      url: `/outcomes/${id}`,
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: { _method: "PUT", ...product },
+      signal: cancel
+        ? cancelApiObject[this.create.name].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
+  delete: async function (token, id, cancel = false) {
+    await api.request({
+      url: `/outcomes/${id}`,
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       signal: cancel
         ? cancelApiObject[this.create.name].handleRequestCancellation().signal
         : undefined,

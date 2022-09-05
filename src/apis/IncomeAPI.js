@@ -87,6 +87,31 @@ export const IncomeAPI = {
         : undefined,
     });
   },
+  update: async function (token, id, data, cancel = false) {
+    await api.request({
+      url: `/incomes/${id}`,
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: { _method: "PUT", ...data },
+      signal: cancel
+        ? cancelApiObject[this.create.name].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
+  delete: async function (token, id, cancel = false) {
+    await api.request({
+      url: `/incomes/${id}`,
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      signal: cancel
+        ? cancelApiObject[this.create.name].handleRequestCancellation().signal
+        : undefined,
+    });
+  },
 };
 
 // defining the cancel API object for ProductAPI
