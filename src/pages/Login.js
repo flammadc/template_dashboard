@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { TailSpin } from "react-loader-spinner";
 import { useDispatch } from "react-redux";
 import { Label, Input, Button } from "@windmill/react-ui";
 import { login } from "../utils/function/auth";
 
 function Login() {
   const [user, setUser] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const handleLogin = (e) => {
     e.preventDefault();
+    setLoading(true);
     login(dispatch, user);
+    setLoading(false);
   };
 
   return (
@@ -58,9 +61,21 @@ function Login() {
                   }
                 />
               </Label>
-
               <Button className="mt-4" type="submit">
-                Log in
+                {loading ? (
+                  <TailSpin
+                    height="20"
+                    width="20"
+                    color="#ffffff"
+                    ariaLabel="tail-spin-loading"
+                    radius="1"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                  />
+                ) : (
+                  "Login"
+                )}
               </Button>
             </form>
           </main>
