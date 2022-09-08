@@ -46,7 +46,7 @@ const TableDashboard = ({ status, transaction }) => {
         <Badge
           type={status}
           className={
-            status == "income"
+            status == "Income"
               ? "text-teal-700 bg-teal-100 dark:text-white dark:bg-teal-600"
               : "text-purple-700 bg-purple-100 dark:text-white dark:bg-purple-600"
           }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useSelector } from "react-redux";
 import moment from "moment";
 
 import PageTitle from "../../components/Typography/PageTitle";
@@ -22,9 +23,8 @@ import ChartCard from "../../components/Chart/ChartCard";
 import ChartLegend from "../../components/Chart/ChartLegend";
 import { lineOptions, lineLegends } from "../../utils/demo/chartsData";
 
-import response from "../../utils/demo/tableData";
 import TableDashboard from "./TableDashboard";
-import { useSelector } from "react-redux";
+import ThemedSuspense from "../../components/ThemedSuspense";
 
 function Dashboard() {
   const user = useSelector((state) => state.user.currentUser);
@@ -120,11 +120,11 @@ function Dashboard() {
     const getTransactions = async () => {
       const incomes = await IncomeAPI.getAll(user.token);
       incomes.map((income) => {
-        income.status = "income";
+        income.status = "Income";
       });
       const outcomes = await OutcomeAPI.getAll(user.token);
       outcomes.map((outcome) => {
-        outcome.status = "outcome";
+        outcome.status = "Outcome";
       });
 
       setTransactions([
@@ -143,7 +143,11 @@ function Dashboard() {
     getTransactions();
   }, []);
 
-  return (
+  return amountDoughnut.income &&
+    amountDoughnut.outcome &&
+    incomeStats.length &&
+    outcomeStats.length &&
+    transactions.length ? (
     <>
       <PageTitle>Dashboard</PageTitle>
       <div className="grid grid-cols-2 gap-6 mb-8">
@@ -183,6 +187,8 @@ function Dashboard() {
         </TableContainer>
       </div>
     </>
+  ) : (
+    <ThemedSuspense />
   );
 }
 
