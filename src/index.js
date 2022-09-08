@@ -1,12 +1,14 @@
-import React, { Suspense } from 'react'
-import ReactDOM from 'react-dom'
-import './assets/css/tailwind.output.css'
-import App from './App'
-import { SidebarProvider } from './context/SidebarContext'
-import ThemedSuspense from './components/ThemedSuspense'
-import { Windmill } from '@windmill/react-ui'
-import * as serviceWorker from './serviceWorker'
-import myTheme from './myTheme.js'
+import React, { Suspense } from "react";
+import ReactDOM from "react-dom";
+import "./assets/css/tailwind.output.css";
+import App from "./App";
+import { SidebarProvider } from "./context/SidebarContext";
+import ThemedSuspense from "./components/ThemedSuspense";
+import { Windmill } from "@windmill/react-ui";
+import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor, store } from "./redux/store";
 
 // if (process.env.NODE_ENV !== 'production') {
 //   const axe = require('react-axe')
@@ -16,15 +18,19 @@ import myTheme from './myTheme.js'
 ReactDOM.render(
   <SidebarProvider>
     <Suspense fallback={<ThemedSuspense />}>
-      <Windmill usePreferences >
-        <App />
+      <Windmill usePreferences>
+        <Provider store={store}>
+          <PersistGate persistor={persistor}>
+            <App />
+          </PersistGate>
+        </Provider>
       </Windmill>
     </Suspense>
   </SidebarProvider>,
-  document.getElementById('root')
-)
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.register()
+serviceWorker.register();

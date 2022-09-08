@@ -1,39 +1,50 @@
-import React, { useContext, useState } from "react";
-import { Link, Route } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { SidebarContext } from "../context/SidebarContext";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../utils/function/auth";
 import {
-  SearchIcon,
   MoonIcon,
   SunIcon,
-  BellIcon,
   MenuIcon,
   OutlinePersonIcon,
-  OutlineCogIcon,
   OutlineLogoutIcon,
 } from "../icons";
 import {
   Avatar,
-  Badge,
-  Input,
   Dropdown,
   DropdownItem,
   WindmillContext,
 } from "@windmill/react-ui";
+import { TeamAPI } from "../apis/TeamAPI";
 
 function Header() {
+  const user = useSelector((state) => state.user.currentUser);
+  const history = useHistory();
+  const [profile, setProfile] = useState();
+  const dispatch = useDispatch();
+  const BASE_URL = "http://localhost:8000/files/";
   const { mode, toggleMode } = useContext(WindmillContext);
   const { toggleSidebar } = useContext(SidebarContext);
 
   const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
-  function handleNotificationsClick() {
-    setIsNotificationsMenuOpen(!isNotificationsMenuOpen);
-  }
-
   function handleProfileClick() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   }
+
+  const handleLogout = () => {
+    logout(dispatch, user.user.id, history);
+  };
+
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await TeamAPI.get(user.token, user.user.id);
+      setProfile(res.profile);
+    };
+    getUser();
+  });
 
   return (
     <header className="z-40 py-4 bg-white shadow-bottom dark:bg-gray-800">
@@ -79,7 +90,9 @@ function Header() {
             >
               <Avatar
                 className="align-middle"
-                src="https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                src={
+                  profile ? BASE_URL + profile : BASE_URL + "profiles/user.png"
+                }
                 alt=""
                 aria-hidden="true"
               />
@@ -97,10 +110,7 @@ function Header() {
                 <span>Profile</span>
               </DropdownItem>
 
-              <DropdownItem
-                tag={Link}
-                to="/login"
-              >
+              <DropdownItem onClick={handleLogout}>
                 <OutlineLogoutIcon
                   className="w-4 h-4 mr-3"
                   aria-hidden="true"

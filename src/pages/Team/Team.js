@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 import PageTitle from "../../components/Typography/PageTitle";
+import { TeamAPI } from "../../apis/TeamAPI";
+import { useSelector } from "react-redux";
 
 import {
   Table,
@@ -9,71 +11,31 @@ import {
   TableCell,
   TableBody,
   TableRow,
-  TableFooter,
   TableContainer,
-  Badge,
-  Avatar,
   Button,
-  Pagination,
 } from "@windmill/react-ui";
 import { EditIcon, TrashIcon } from "../../icons";
-
-import response from "../../utils/demo/userData";
-// make a copy of the data, for the second table
-const response2 = response.concat([]);
+import { FaUserCircle } from "react-icons/fa";
 
 const Team = () => {
-  /**
-   * DISCLAIMER: This code could be badly improved, but for the sake of the example
-   * and readability, all the logic for both table are here.
-   * You would be better served by dividing each table in its own
-   * component, like Table(?) and TableWithActions(?) hiding the
-   * presentation details away from the page view.
-   */
+  const { currentUser } = useSelector((state) => state.user);
+  const history = useHistory();
+  const [teams, setTeams] = useState([]);
 
-  // setup pages control for every table
-  const [pageTable1, setPageTable1] = useState(1);
-  const [pageTable2, setPageTable2] = useState(1);
-
-  // setup data for every table
-  const [dataTable1, setDataTable1] = useState([]);
-  const [dataTable2, setDataTable2] = useState([]);
-
-  // pagination setup
-  const resultsPerPage = 10;
-  const totalResults = response.length;
-
-  // pagination change control
-  function onPageChangeTable1(p) {
-    setPageTable1(p);
-  }
-
-  // pagination change control
-  function onPageChangeTable2(p) {
-    setPageTable2(p);
-  }
-
-  // on page change, load new sliced data
-  // here you would make another server request for new data
   useEffect(() => {
-    setDataTable1(
-      response.slice(
-        (pageTable1 - 1) * resultsPerPage,
-        pageTable1 * resultsPerPage
-      )
-    );
-  }, [pageTable1]);
+    const getTeams = async () => {
+      const res = await TeamAPI.getAll(currentUser.token);
+      const filteredUser = res.filter((data) => data.id != currentUser.user.id);
+      setTeams(filteredUser);
+    };
+    getTeams();
+  }, []);
 
-  // on page change, load new sliced data
-  // here you would make another server request for new data
-  useEffect(() => {
-    setDataTable2(
-      response2.slice(
-        (pageTable2 - 1) * resultsPerPage,
-        pageTable2 * resultsPerPage
-      )
-    );
-  }, [pageTable2]);
+  const handleDelete = async (id) => {
+    await TeamAPI.delete(currentUser.token, id);
+    history.go(0);
+  };
+
   return (
     <>
       <PageTitle>Team</PageTitle>
@@ -90,58 +52,47 @@ const Team = () => {
               </tr>
             </TableHeader>
             <TableBody>
-              {dataTable2.map((user, i) => (
-                <TableRow key={i}>
-                  <TableCell>
-                    <div className="flex items-center text-sm">
-                      <Avatar
-                        className="hidden mr-3 md:block"
-                        src={user.picture}
-                        alt="User picture"
-                      />
-                      <div>
-                        <p className="font-semibold">{user.name}</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          {user.title}
-                        </p>
+              {teams &&
+                teams.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell>
+                      <div className="flex items-center text-sm">
+                        <FaUserCircle className="text-2xl mr-3" />
+                        <div>
+                          <p className="font-semibold">{user.name}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                            {user.title}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </TableCell>
+                    </TableCell>
 
-                  <TableCell>
-                    <div className="flex items-center space-x-4">
-                      <Button
-                        tag={Link}
-                        to={"/app/user/edit/" + user.id}
-                        layout="link"
-                        size="icon"
-                        aria-label="Edit"
-                      >
-                        <EditIcon className="w-5 h-5" aria-hidden="true" />
-                      </Button>
-                      <Button
-                        tag={Link}
-                        to={"/app/user/delete/" + user.id}
-                        layout="link"
-                        size="icon"
-                        aria-label="Delete"
-                      >
-                        <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <TableCell>
+                      <div className="flex items-center space-x-4">
+                        <Button
+                          tag={Link}
+                          to={"/app/user/edit/" + user.id}
+                          layout="link"
+                          size="icon"
+                          aria-label="Edit"
+                        >
+                          <EditIcon className="w-5 h-5" aria-hidden="true" />
+                        </Button>
+                        <Button
+                          tag={Link}
+                          layout="link"
+                          size="icon"
+                          aria-label="Delete"
+                          onClick={() => handleDelete(user.id)}
+                        >
+                          <TrashIcon className="w-5 h-5" aria-hidden="true" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
-          <TableFooter>
-            <Pagination
-              totalResults={totalResults}
-              resultsPerPage={resultsPerPage}
-              onChange={onPageChangeTable2}
-              label="Table navigation"
-            />
-          </TableFooter>
         </TableContainer>
       </div>
     </>
