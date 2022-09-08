@@ -40,6 +40,7 @@ export const TeamAPI = {
       data: { _method: "PUT", ...user },
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
       // retrieving the signal value by using the property name
       signal: cancel
