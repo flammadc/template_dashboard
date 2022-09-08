@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
 
 import PageTitle from "../../components/Typography/PageTitle";
 import {
@@ -8,10 +7,8 @@ import {
   TableCell,
   TableBody,
   TableContainer,
-  Button,
 } from "@windmill/react-ui";
 
-import response from "../../utils/demo/tableData";
 import { ProductAPI } from "../../apis/ProductAPI";
 import DataTable from "./DataTable";
 import { useSelector } from "react-redux";
@@ -20,7 +17,6 @@ import { useSelector } from "react-redux";
 const Product = () => {
   const user = useSelector((state) => state.user.currentUser);
   const [products, setProducts] = useState();
-  const history = useHistory();
 
   useEffect(() => {
     const getProducts = async () => {
